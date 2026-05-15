@@ -109,6 +109,6 @@ jobs:
             # Run new container
             docker run -d \
               --name churn-api \
-              -p 443:8000 \
+              -p 443:8569 \
               --restart always \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
