@@ -57,13 +57,13 @@ jobs:
 
       - name: Create ECR repository if not exists
         run: |
-          aws ecr describe-repositories --repository-names churn-prediction-api || \
-          aws ecr create-repository --repository-name churn-prediction-api
+          aws ecr describe-repositories --repository-names ahmed-sabry || \
+          aws ecr create-repository --repository-name ahmed-sabry
 
       - name: Build and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: churn-prediction-api
+          ECR_REPOSITORY: ahmed-sabry
           IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
