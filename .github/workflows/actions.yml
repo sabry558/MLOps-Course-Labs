@@ -55,7 +55,6 @@ jobs:
           docker tag churn-prediction-api:latest $ECR_REGISTRY/churn-prediction-api:latest
           docker push $ECR_REGISTRY/churn-prediction-api:latest
 
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
