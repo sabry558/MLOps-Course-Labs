@@ -72,5 +72,5 @@ jobs:
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
             docker stop churn-prediction-api || true # In case the container doesn't exist yet
             docker rm churn-prediction-api || true
-            docker run -d -p 80:8005 --name churn-prediction-api ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest 
+            docker run -d -p 443:8005 --name churn-prediction-api ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest 
 
