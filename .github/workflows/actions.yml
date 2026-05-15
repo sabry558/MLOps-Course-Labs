@@ -41,7 +41,7 @@ jobs:
 
       - name: Push Docker Image to Docker Hub
         run: |
-          docker tag churn-prediction-api:latest ${{ secrets.DOCKERHUB_USERNAME }}/churn-prediction-api:latest
+          docker tag churn-prediction-api:latest ${{ secrets.DOCKERHUB_USERNAME }}./churn-prediction-api:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/churn-prediction-api:latest
 
       - name: Deploy to EC2
