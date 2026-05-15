@@ -100,15 +100,15 @@ jobs:
             docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
             # Pull latest image
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahmed-sabry:latest
 
             # Stop and remove old container if exists
-            docker stop churn-api || true
-            docker rm churn-api || true
+            docker stop ahmed-sabry || true
+            docker rm ahmed-sabry || true
 
             # Run new container
             docker run -d \
-              --name churn-api \
+              --name ahmed-sabry \
               -p 443:8005 \
               --restart always \
-              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
+              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahmed-sabry:latest
