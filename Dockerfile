@@ -1,17 +1,16 @@
-FROM python:3.14-slim
+FROM python:3.12-slim
 
 WORKDIR /project
 
 COPY pyproject.toml README.md ./
 
-# Copy the app/ directory BEFORE we pip install . 
 COPY app/ app/
-
-RUN pip install --upgrade pip && \
-    pip install .
 
 COPY data/ data/
 COPY main.py .
+
+RUN  pip install --default-timeout=100 --no-cache-dir .
+
 
 EXPOSE 8000
 
