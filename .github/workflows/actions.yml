@@ -55,14 +55,20 @@ jobs:
           docker tag churn-prediction-api:latest $ECR_REGISTRY/churn-prediction-api:latest
           docker push $ECR_REGISTRY/churn-prediction-api:latest
 
-          
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }} 
           username: ${{ secrets.EC2_USERNAME }} 
-          key: ${{ secrets.EC2_SSH_KEY }}  
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: secrets.AWS_ACCESS_KEY_ID, secrets.AWS_SECRET_ACCESS_KEY, secrets.AWS_REGION
           script: |
+            aws configure set aws_access_key_id $secrets_AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $secrets_AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $secrets_AWS_REGION
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+            
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
             docker stop churn-prediction-api || true # In case the container doesn't exist yet
             docker rm churn-prediction-api || true
