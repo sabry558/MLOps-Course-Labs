@@ -102,7 +102,7 @@ jobs:
             # Pull latest image
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahmed-sabry:latest
 
-            
+
             # Stop and remove old container if exists
             docker stop ahmed-sabry || true
             docker rm ahmed-sabry || true
@@ -110,6 +110,6 @@ jobs:
             # Run new container
             docker run -d \
               --name ahmed-sabry \
-              -p 443:8005 \
+              -p 443:8000 \
               --restart always \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ahmed-sabry:latest
