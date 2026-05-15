@@ -47,9 +47,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: $\{{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: $\{{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: $\{{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -62,7 +62,7 @@ jobs:
 
       - name: Build and push Docker image to ECR
         env:
-          ECR_REGISTRY: $\{{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: churn-prediction-api
           IMAGE_TAG: latest
         run: |
@@ -82,13 +82,13 @@ jobs:
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1
         env:
-          AWS_ACCESS_KEY_ID: $\{{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: $\{{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: $\{{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         with:
-          host: $\{{ secrets.EC2_HOST }}
-          username: $\{{ secrets.EC2_USERNAME }}
-          key: $\{{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
           script: |
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
@@ -96,11 +96,11 @@ jobs:
             aws configure set default.region $AWS_REGION
 
             # Login to ECR
-            aws ecr get-login-password --region $\{{ secrets.AWS_REGION }} | \
-            docker login --username AWS --password-stdin $\{{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$\{{ secrets.AWS_REGION }}.amazonaws.com
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+            docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
             # Pull latest image
-            docker pull $\{{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$\{{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
 
             # Stop and remove old container if exists
             docker stop churn-api || true
@@ -111,4 +111,4 @@ jobs:
               --name churn-api \
               -p 443:8000 \
               --restart always \
-              $\{{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$\{{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
+              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/churn-prediction-api:latest
